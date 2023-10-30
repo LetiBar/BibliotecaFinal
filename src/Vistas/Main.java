@@ -49,12 +49,8 @@ public class Main extends javax.swing.JFrame {
         jMListaSocio = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jNuevoPrestamo = new javax.swing.JMenuItem();
-        jMmodificarPrestamo = new javax.swing.JMenuItem();
         jMDevolución = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
         JMConsultas = new javax.swing.JMenu();
-        jMPrestamosPorSocio = new javax.swing.JMenuItem();
         JMPrestamosVencidos = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -135,14 +131,6 @@ public class Main extends javax.swing.JFrame {
         });
         jMenu2.add(jNuevoPrestamo);
 
-        jMmodificarPrestamo.setText("Modificar Prestamo");
-        jMmodificarPrestamo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMmodificarPrestamoActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jMmodificarPrestamo);
-
         jMDevolución.setText("Devolución");
         jMDevolución.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,17 +141,7 @@ public class Main extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Devoluciones");
-
-        jMenuItem2.setText("Cancelar Devolución");
-        jMenu3.add(jMenuItem2);
-
-        jMenuBar1.add(jMenu3);
-
         JMConsultas.setText("Consultas");
-
-        jMPrestamosPorSocio.setText("Prestamos por Socio");
-        JMConsultas.add(jMPrestamosPorSocio);
 
         JMPrestamosVencidos.setText("Prestamos Vencidos");
         JMPrestamosVencidos.addActionListener(new java.awt.event.ActionListener() {
@@ -272,15 +250,6 @@ public class Main extends javax.swing.JFrame {
        Escritorio.moveToFront(modifLibro);
     }//GEN-LAST:event_jMModificarLibActionPerformed
 
-    private void jMmodificarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMmodificarPrestamoActionPerformed
-        Escritorio.removeAll();
-       Escritorio.repaint();
-       Vista_Modificaciones modifPrestamo = new Vista_Modificaciones();
-       modifPrestamo.setVisible(true);
-       Escritorio.add(modifPrestamo);
-       Escritorio.moveToFront(modifPrestamo);
-    }//GEN-LAST:event_jMmodificarPrestamoActionPerformed
-
     
     public static void main(String args[]) {
 //        FlatArcOrangeIJTheme.setup();
@@ -311,14 +280,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMListaSocio;
     private javax.swing.JMenuItem jMModificarLib;
     private javax.swing.JMenuItem jMNuevoSocio;
-    private javax.swing.JMenuItem jMPrestamosPorSocio;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenu jMenuSocios;
-    private javax.swing.JMenuItem jMmodificarPrestamo;
     private javax.swing.JMenuItem jNuevoPrestamo;
     // End of variables declaration//GEN-END:variables
 }

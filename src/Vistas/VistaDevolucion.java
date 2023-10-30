@@ -18,28 +18,26 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-
 public class VistaDevolucion extends javax.swing.JInternalFrame {
 
     private DefaultTableModel modelo1 = new DefaultTableModel();
     private DefaultTableModel modelo2 = new DefaultTableModel();
-    
+
     public VistaDevolucion() {
         initComponents();
         estilos();
         cabeceraTabla1();
         cabeceraTabla2();
     }
-    
-    public void estilos(){
-       jlTitulo.putClientProperty( "FlatLaf.styleClass" , "h2" );
-       jlTitulo.setForeground(Color.ORANGE);
-       
+
+    public void estilos() {
+        jlTitulo.putClientProperty("FlatLaf.styleClass", "h2");
+        jlTitulo.setForeground(Color.ORANGE);
+
 //       jlMensaje1.putClientProperty( "FlatLaf.styleClass" , "monospaced" );
 //       jlMensaje2.putClientProperty( "FlatLaf.styleClass" , "monospaced" );
-       
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -228,59 +226,58 @@ public class VistaDevolucion extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jtxtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtBusquedaActionPerformed
-                           
+
     }//GEN-LAST:event_jtxtBusquedaActionPerformed
 
     private void jtxtBusquedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtBusquedaMouseClicked
-      
+
     }//GEN-LAST:event_jtxtBusquedaMouseClicked
 
     private void jtxtBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtBusquedaKeyTyped
-   
+
     }//GEN-LAST:event_jtxtBusquedaKeyTyped
 
     private void jbtnRegistrarDevolucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRegistrarDevolucActionPerformed
-       
-       PrestamoData presData = new PrestamoData();
-       LectorData lecData = new LectorData();
-       Lector lector = new Lector();
-       LocalDate fechaActual = LocalDate.now();
-       EjemplarData ejemData = new EjemplarData();
-       
-           int filaSeleccionada = jTPrestamos.getSelectedRow();
-        
-        if (filaSeleccionada !=-1 ){
-            
-           TableModel tableModel = jTPrestamos.getModel();
-            
-           int idPrestamo = (int)tableModel.getValueAt(filaSeleccionada,0);
-           Prestamo prestamo = presData.obtenerPrestamosSinDevolver(idPrestamo);           
-           
-           String observaciones = jtxtObservaciones.getText();
-           if(!observaciones.isEmpty()){
-               
+
+        PrestamoData presData = new PrestamoData();
+        LectorData lecData = new LectorData();
+        Lector lector = new Lector();
+        LocalDate fechaActual = LocalDate.now();
+        EjemplarData ejemData = new EjemplarData();
+
+        int filaSeleccionada = jTPrestamos.getSelectedRow();
+
+        if (filaSeleccionada != -1) {
+
+            TableModel tableModel = jTPrestamos.getModel();
+
+            int idPrestamo = (int) tableModel.getValueAt(filaSeleccionada, 0);
+            Prestamo prestamo = presData.obtenerPrestamosSinDevolver(idPrestamo);
+
+            String observaciones = jtxtObservaciones.getText();
+            if (!observaciones.isEmpty()) {
+
                 presData.devolucion(idPrestamo, fechaActual, observaciones);
                 Prestamo prestamoDevuelto = presData.obtenerPrestamo(idPrestamo);
                 int idEjemp = prestamoDevuelto.getEjemplar().getIdEjemplar();
                 int idLibro = prestamoDevuelto.getEjemplar().getLibro().getIdLibro();
-                
-                ejemData.actualizarEjemplar(idLibro, prestamoDevuelto.getEjemplar().getStock() +1);
+
+                ejemData.actualizarEjemplar(idLibro, prestamoDevuelto.getEjemplar().getStock() + 1);
                 cargarTabla2(prestamoDevuelto);
-           }else{
-               presData.devolucion(idPrestamo, fechaActual);
-               Prestamo prestamoDevuelto = presData.obtenerPrestamo(idPrestamo);
-               int idEjemp = prestamoDevuelto.getEjemplar().getIdEjemplar();
-               int idLibro = prestamoDevuelto.getEjemplar().getLibro().getIdLibro();
-                
-                ejemData.actualizarEjemplar(idLibro, prestamoDevuelto.getEjemplar().getStock() +1);
+            } else {
+                presData.devolucion(idPrestamo, fechaActual);
+                Prestamo prestamoDevuelto = presData.obtenerPrestamo(idPrestamo);
+                int idEjemp = prestamoDevuelto.getEjemplar().getIdEjemplar();
+                int idLibro = prestamoDevuelto.getEjemplar().getLibro().getIdLibro();
+
+                ejemData.actualizarEjemplar(idLibro, prestamoDevuelto.getEjemplar().getStock() + 1);
                 cargarTabla2(prestamoDevuelto);
-           }
-                   
-           
-        }else{
+            }
+
+        } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un prestamo.");
         }
-        
+
     }//GEN-LAST:event_jbtnRegistrarDevolucActionPerformed
 
     private void jbtnCancelarSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarSalirActionPerformed
@@ -288,28 +285,35 @@ public class VistaDevolucion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbtnCancelarSalirActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
-     if(modelo1.getRowCount()>0) {
+
+        if (modelo1.getRowCount() > 0) {
             borrarTabla1();
         }
         PrestamoData presData = new PrestamoData();
-                          
+
         try {
-            int dni = Integer.parseInt(jtxtBusqueda.getText()) ;
-             
-                for(Prestamo prestamo :  presData.obtenerPrestamosPorLectorSinDevolucion(dni)){
-            
-                  cargarTabla1(prestamo);
-                }
-            
-        }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(this, "Debe ingresar sólo números.");
+            int dni = Integer.parseInt(jtxtBusqueda.getText());
+
+            LectorData lecto = new LectorData();
+            Lector lector = lecto.buscarLectorPorDni(dni);
+
+            if (lector != null) {
+                for (Prestamo prestamo : presData.obtenerPrestamosPorLectorSinDevolucion(dni)) {
+
+                    cargarTabla1(prestamo);
+                 
+                }   
+                }else{
+                        JOptionPane.showMessageDialog(this, "Ingrese un dni válido");
+                        }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar sólo números.");
         }
-                
-       
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
-       
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -329,45 +333,45 @@ public class VistaDevolucion extends javax.swing.JInternalFrame {
     private javax.swing.JTextArea jtxtObservaciones;
     // End of variables declaration//GEN-END:variables
 
-    private void cabeceraTabla1(){
-        
-        modelo1.addColumn("ID PRESTAMO");    
+    private void cabeceraTabla1() {
+
+        modelo1.addColumn("ID PRESTAMO");
         modelo1.addColumn("SOCIO");
-        modelo1.addColumn("LIBRO");        
+        modelo1.addColumn("LIBRO");
         modelo1.addColumn("FECHA DE PRESTAMO");
         modelo1.addColumn("FECHA LÍMITE");
         modelo1.addColumn("OBSERVACIONES");
         jTPrestamos.setModel(modelo1);
-        
+
     }
-    
-    private void cabeceraTabla2(){
-        
-        modelo2.addColumn("ID PRESTAMO");    
+
+    private void cabeceraTabla2() {
+
+        modelo2.addColumn("ID PRESTAMO");
         modelo2.addColumn("SOCIO");
-        modelo2.addColumn("LIBRO");        
+        modelo2.addColumn("LIBRO");
         modelo2.addColumn("FECHA DE PRESTAMO");
         modelo2.addColumn("FECHA LÍMITE");
         modelo2.addColumn("FECHA DEVOLUCION");
         modelo2.addColumn("OBSERVACIONES");
         jtMostrarDevolucion.setModel(modelo2);
-        
+
     }
-    
-    private void cargarTabla1(Prestamo prestamo){  
-        
-        modelo1.addRow(new Object[]{prestamo.getIdPrestamo(), prestamo.getLector().getApellido()+", "+prestamo.getLector().getNombre(), 
+
+    private void cargarTabla1(Prestamo prestamo) {
+
+        modelo1.addRow(new Object[]{prestamo.getIdPrestamo(), prestamo.getLector().getApellido() + ", " + prestamo.getLector().getNombre(),
             prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getFechaPrestamo(), prestamo.getFechaLimite(), prestamo.getObservaciones()});
-        
-    }  
-    
-    private void cargarTabla2(Prestamo prestamo){  
-        
-        modelo2.addRow(new Object[]{prestamo.getIdPrestamo(), prestamo.getLector().getApellido()+", "+prestamo.getLector().getNombre(), 
+
+    }
+
+    private void cargarTabla2(Prestamo prestamo) {
+
+        modelo2.addRow(new Object[]{prestamo.getIdPrestamo(), prestamo.getLector().getApellido() + ", " + prestamo.getLector().getNombre(),
             prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getFechaPrestamo(), prestamo.getFechaLimite(), prestamo.getFechaDevolucion(), prestamo.getObservaciones()});
-        
-    }  
-    
+
+    }
+
     private void borrarTabla1() {
 
         int indice = modelo1.getRowCount() - 1;
