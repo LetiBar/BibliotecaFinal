@@ -59,13 +59,13 @@ public class Main extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Escritorio.setPreferredSize(new java.awt.Dimension(1280, 720));
+        Escritorio.setPreferredSize(new java.awt.Dimension(1080, 720));
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
         EscritorioLayout.setHorizontalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1280, Short.MAX_VALUE)
+            .addGap(0, 1080, Short.MAX_VALUE)
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -275,15 +275,13 @@ public class Main extends javax.swing.JFrame {
     private void jMmodificarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMmodificarPrestamoActionPerformed
         Escritorio.removeAll();
        Escritorio.repaint();
-       Vista_ModificarPrestamo modifPrestamo = new Vista_ModificarPrestamo();
+       Vista_Modificaciones modifPrestamo = new Vista_Modificaciones();
        modifPrestamo.setVisible(true);
        Escritorio.add(modifPrestamo);
        Escritorio.moveToFront(modifPrestamo);
     }//GEN-LAST:event_jMmodificarPrestamoActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    
     public static void main(String args[]) {
 //        FlatArcOrangeIJTheme.setup();
 //        FlatDarkFlatIJTheme.setup();

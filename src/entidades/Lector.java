@@ -114,7 +114,7 @@ public class Lector {
 
     @Override
     public String toString() {
-        return "Lector: " + "idLector= " + idLector + ", nombre= " + nombre + ", apellido =" + apellido + ", dni= " + dni + ", fecha de Nac= " + fechaNac + ", direccion= " + direccion + ", telefono= " + telefono + ", mail= " + mail + ", activo= " + activo;
+        return idLector + "- " + apellido + ", " + nombre;
     }
     
 

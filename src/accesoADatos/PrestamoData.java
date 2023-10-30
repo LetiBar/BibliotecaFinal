@@ -89,6 +89,36 @@ public class PrestamoData {
         }
     }
     
+    //ACTUALIZAR PRESTAMO
+    public void modificarPrestamo(int idPrestamo, Lector lector, Ejemplar ejemplar, LocalDate nuevaFechaPrestamo, LocalDate nuevaFechaLimite, String nuevasObservaciones) {
+        String sql = "UPDATE prestamo SET idLector=?, idEjemplar=?, fechaPrestamo=?, fechaLimite=?, observaciones=? "
+                + "WHERE idPrestamo=?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, lector.getIdLector());
+            ps.setInt(2, ejemplar.getIdEjemplar());
+            ps.setDate(3, java.sql.Date.valueOf(nuevaFechaPrestamo));
+            ps.setDate(4, java.sql.Date.valueOf(nuevaFechaLimite));
+            ps.setString(5, nuevasObservaciones);
+            ps.setInt(6, idPrestamo);
+
+            int filas = ps.executeUpdate();
+
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(null, "Préstamo modificado correctamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al modificar el préstamo.");
+            }
+
+            ps.close();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al modificar el préstamo: " + ex.getMessage());
+        }
+    }
+    
     public void devolucion(int idPrestamo, LocalDate FechaDevolucion, String nuevasObservaciones) {
         String sql = "UPDATE prestamo SET fechaDevolucion=?, observaciones=? WHERE idPrestamo=?";
 
@@ -202,46 +232,7 @@ public class PrestamoData {
         return prestados;
 
     } 
-    
-    public List<Prestamo> obtenerPrestamosSinDevolver() {
-        ArrayList<Prestamo> prestados = new ArrayList<>();
-        String sql = "SELECT * FROM prestamo WHERE fechaDevolucion IS null ";
-
-        try {
-
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                //Dentro de while usamos el constructor vacio de Prestamo:
-                //Creamos un objeto Prestamo
-                Prestamo presta = new Prestamo();
-
-                //Vamos a setear los datos en base a los que devolvio el ResulSet
-                presta.setIdPrestamo(rs.getInt("idPrestamo"));//Seteamos el id
-                Lector lecto = lecData.buscarLectorPorId(rs.getInt("idLector"));//Recuperamos el Lector
-                Ejemplar ejempla = ejeData.buscarEjemplar(rs.getInt("idEjemplar"));//Recuperamos el Ejemplar
-                presta.setLector(lecto);//Seteamos al prestamo el lector que acabamos de recuperar
-                presta.setEjemplar(ejempla);//Seteamos al prestamo el ejemplar que acabamos de recuperar
-                presta.setFechaPrestamo(rs.getDate("fechaPrestamo").toLocalDate());
-                presta.setFechaLimite(rs.getDate("fechaLimite").toLocalDate());
-                presta.setObservaciones(rs.getString("Observaciones"));
-
-                //Armado el prestamo lo agregamos a nuestra lista prestados
-                prestados.add(presta);
-                //Nota: Por cada prestamo que tenga en el ResultSet recupero los datos,+
-                //los seteamos y lo guardamos en el ArrayList (prestados)
-            }
-
-            ps.close();
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla prestamo " + ex);
-        }
-
-        return prestados;
-
-    } 
+       
     
     public List<Prestamo> obtenerPrestamosPorLector(int idLector) {
         ArrayList<Prestamo> prestados = new ArrayList<>();
@@ -395,7 +386,51 @@ public class PrestamoData {
 
         return presta;
 
-    }     
+    }   
+    
+    public List<Prestamo> obtenerPrestamosSinDevolver() {
+        ArrayList<Prestamo> prestados = new ArrayList<>();
+        String sql = "SELECT * FROM `prestamo` LEFT JOIN ejemplar "
+                + "ON (prestamo.idEjemplar = ejemplar.idEjemplar) "
+                + "LEFT JOIN libro ON ejemplar.idLibro = libro.idLibro WHERE libro.estado = 1 "
+                + "AND fechaDevolucion IS null";
+//      "SELECT * FROM prestamo JOIN lector ON (prestamo.idLector = lector.idLector)\n" +
+//        "WHERE apellido LIKE '%"+apellidoLector+"%' ";
+        try {
+
+            PreparedStatement ps = con.prepareStatement(sql);            
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                //Dentro de while usamos el constructor vacio de Prestamo:
+                //Creamos un objeto Prestamo
+                Prestamo presta = new Prestamo();
+
+                //Vamos a setear los datos en base a los que devolvio el ResulSet
+                presta.setIdPrestamo(rs.getInt("idPrestamo"));//Seteamos el id
+                Lector lecto = lecData.buscarLectorPorId(rs.getInt("idLector"));//Recuperamos el Lector
+                Ejemplar ejempla = ejeData.buscarEjemplar(rs.getInt("idEjemplar"));//Recuperamos el Ejemplar
+                presta.setLector(lecto);//Seteamos al prestamo el lector que acabamos de recuperar
+                presta.setEjemplar(ejempla);//Seteamos al prestamo el ejemplar que acabamos de recuperar
+                presta.setFechaPrestamo(rs.getDate("fechaPrestamo").toLocalDate());
+                presta.setFechaLimite(rs.getDate("fechaLimite").toLocalDate());
+                presta.setObservaciones(rs.getString("Observaciones"));
+
+                //Armado el prestamo lo agregamos a nuestra lista prestados
+                prestados.add(presta);
+                //Nota: Por cada prestamo que tenga en el ResultSet recupero los datos,+
+                //los seteamos y lo guardamos en el ArrayList (prestados)
+            }
+
+            ps.close();
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla prestamo " + ex);
+        }
+
+        return prestados;
+
+    } 
     
     public List<Prestamo> obtenerPrestamosPorLector(String apellidoLector) {
         ArrayList<Prestamo> librosPrestados = new ArrayList<>();

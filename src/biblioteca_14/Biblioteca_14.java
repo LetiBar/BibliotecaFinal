@@ -48,26 +48,28 @@ public class Biblioteca_14 {
     
 // //prestamoData
        //INSTANCIAMOS LECTORDATA, EJEMPLAR DATA Y PRESTAMODATA
-      LectorData ld = new LectorData();
-       EjemplarData ed = new EjemplarData();
-//       PrestamoData pd = new PrestamoData();
-       //Recuperamos un lector por su id
-      Lector lect = ld.buscarLectorPorId(2);
-//        System.out.println(lect);
-//        System.out.println(lect.getIdLector());
-       //Recuperamos un ejemplar por su id
-       Ejemplar ejem = ed.buscarEjemplar(5);
-
-       //Creamos un objeto Prestamo
-       Prestamo prestamo = new Prestamo(lect, ejem, LocalDate.of(2023, 10, 12), LocalDate.of(2023, 10, 15), LocalDate.of(2023, 10, 13), "Sin novedad");
+//      LectorData ld = new LectorData();
+//       EjemplarData ed = new EjemplarData();
+////       PrestamoData pd = new PrestamoData();
+//       //Recuperamos un lector por su id
+//      Lector lect = ld.buscarLectorPorId(2);
+////        System.out.println(lect);
+////        System.out.println(lect.getIdLector());
+//       //Recuperamos un ejemplar por su id
+//       Ejemplar ejem = ed.buscarEjemplar(5);
+//
+//       //Creamos un objeto Prestamo
+//       Prestamo prestamo = new Prestamo(lect, ejem, LocalDate.of(2023, 10, 12), LocalDate.of(2023, 10, 15), LocalDate.of(2023, 10, 13), "Sin novedad");
 
        //Instanciar la clase PrestamoData para acceder a su método guardarPrestamo
        PrestamoData prestamoData = new PrestamoData();
 
        //GUARDAR PRESTAMO
-       prestamoData.guardarPrestamo(prestamo);
+//       prestamoData.guardarPrestamo(prestamo);
 
-           
+           for(Prestamo prestamo : prestamoData.obtenerPrestamosSinDevolver()){
+               System.out.println(prestamo.toString());
+           }
 //        //MODIFICAR PRESTAMO
 //        PrestamoData pd = new PrestamoData(); // Asegúrate de tener una instancia de PrestamoData
 //

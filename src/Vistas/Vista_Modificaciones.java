@@ -4,9 +4,11 @@
  */
 package Vistas;
 
+import accesoADatos.EjemplarData;
 import accesoADatos.LectorData;
 import accesoADatos.LibroData;
 import accesoADatos.PrestamoData;
+import entidades.Ejemplar;
 import entidades.Lector;
 import entidades.Libro;
 import entidades.Prestamo;
@@ -30,26 +32,27 @@ import javax.swing.table.TableRowSorter;
  *
  * @author asdasd mateo2270@gmail.com
  */
-public class Vista_Modificaciones extends javax.swing.JFrame {
+public class Vista_Modificaciones extends javax.swing.JInternalFrame {
 
     private DefaultTableModel modelo = new DefaultTableModel();
     TableRowSorter trs;
-
+   
+ 
     /**
      * Creates new form Vista_Modificaciones
      */
     public Vista_Modificaciones() {
         initComponents();
         estilos();
-        cargarCombo();
-        buscar();
-        scaner();
-        //cargar_datos();
-        cargarDatoLec();
+        cabeceraTabla1();
+        buscarPrestamos();
+        
+        
+        
     }
 
     public void estilos(){
-       jlTitulo.putClientProperty( "FlatLaf.styleClass" , "h2.semibold" );
+       jlTitulo.putClientProperty( "FlatLaf.styleClass" , "h2" );
        jlTitulo.setForeground(Color.ORANGE);
        
 //       jlMensaje1.putClientProperty( "FlatLaf.styleClass" , "monospaced" );
@@ -64,43 +67,40 @@ public class Vista_Modificaciones extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jlTitulo = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jbtnModificar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField2 = new javax.swing.JTextField();
+        jTPrestamos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jdCFLímite = new com.toedter.calendar.JDateChooser();
+        jdcFPrestamo = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtxtObservaciones = new javax.swing.JTextPane();
+        jcbSocios = new javax.swing.JComboBox<>();
+        jcbLibros = new javax.swing.JComboBox<>();
 
         jMenuItem1.setText("jMenuItem1");
 
         jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1080, 720));
 
+        jlTitulo.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
         jlTitulo.setText("MODIFICACIONES");
 
-        jButton1.setText("Realizar Modificacion");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jbtnModificar.setText("Realizar Modificacion");
+        jbtnModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jbtnModificarActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -111,91 +111,69 @@ public class Vista_Modificaciones extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel2.setText("modificar prestamos, darlos de baja ,agregar mas dias  ");
-
-        jLabel4.setText("Titulo");
-
-        jLabel5.setText("Socio");
-
-        jLabel6.setText("F Devolucion");
-
-        jLabel7.setText("F Prestamo");
-
-        jLabel8.setText("Observaciones");
-
-        jLabel9.setText("Codigo");
-
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
+        jTPrestamos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTPrestamosMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(jTPrestamos);
+
+        jLabel2.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
+        jLabel2.setText("modificar prestamos, darlos de baja ,agregar mas dias  ");
+
+        jLabel4.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
+        jLabel4.setText("Libro");
+
+        jLabel5.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
+        jLabel5.setText("Socio");
+
+        jLabel6.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
+        jLabel6.setText("Fecha Límite");
+
+        jLabel7.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
+        jLabel7.setText("Fecha Prestamo");
+
+        jLabel9.setFont(new java.awt.Font("Malgun Gothic Semilight", 1, 12)); // NOI18N
+        jLabel9.setText("Observaciones");
+
+        jScrollPane2.setViewportView(jtxtObservaciones);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 20, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1044, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(363, 363, 363))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(478, 478, 478)
                         .addComponent(jlTitulo))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(187, 187, 187)
-                                .addComponent(jLabel8)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(282, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(363, 363, 363))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(218, 218, 218))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(62, 62, 62)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(321, 321, 321))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 998, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(438, 438, 438))))
+                        .addGap(204, 204, 204)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jdcFPrestamo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(jdCFLímite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(jcbSocios, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jcbLibros, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(341, 341, 341)
+                        .addComponent(jbtnModificar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,246 +181,173 @@ public class Vista_Modificaciones extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addComponent(jlTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(42, 42, 42)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel2)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jcbSocios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcbLibros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel7)
+                    .addComponent(jdcFPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6)
+                    .addComponent(jdCFLímite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(31, 31, 31))
+                .addComponent(jbtnModificar)
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-//    obtenner prestamo por lector 
-//            para modificar
-    private void cargarDatoLec() {
-        LectorData lecData = new LectorData();
-        Lector lec = new Lector();
 
-        for (Lector l : lecData.listarLectores()) {
-            //jComboBox2.addItem(new Lector(l.getIdLector(),l.getNombre(),l.getApellido(),
-            // + l.getDni(),l.getFechaNac(),l.getDireccion(),l.getTelefono(),l.getMail(),l.isActivo()));
-
-            jComboBox2.addItem(l.getApellido());
-
-        }
-
-    }
-
-    //buscar un lector
-    private void id_lector() {
-        LectorData lecData = new LectorData();
-        String lect = jTextField1.getText();
-        lecData.buscarLectorPorApellido(lect);
-        //lecData.buscarLectorNombre(lect);
-
-    }
-
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void jbtnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnModificarActionPerformed
+        int filaSeleccionada = jTPrestamos.getSelectedRow();
+        
         PrestamoData prestData = new PrestamoData();
+        EjemplarData ejempData = new EjemplarData();
+        
+        int idPrestamo = (int) jTPrestamos.getValueAt(filaSeleccionada, 0);
+        Lector lector = (Lector) jcbSocios.getSelectedItem();
+        Libro libro = (Libro) jcbLibros.getSelectedItem();
+        Ejemplar ejemplar = ejempData.obtenerEjemplarPorLibro(libro.getIdLibro());
+        LocalDate fPrestamo = jdcFPrestamo.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate fLimite = jdCFLímite.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        String observ = jtxtObservaciones.getText();
+        
+            prestData.modificarPrestamo(idPrestamo, lector, ejemplar, fPrestamo, fLimite, observ);
 
-        LocalDate fecha = java.time.LocalDate.now(ZoneId.systemDefault());
-
-        //jDateChooser1.setDate(date);   
-        java.util.Date datehoy = java.util.Date.from(fecha.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        Date nueva = jDateChooser1.getDate();
-
-        if (nueva.after(datehoy)) {
-
-            int id = Integer.parseInt(jTextField5.getText());
-            LocalDate nueva_fe = nueva.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate nueva_hoy = datehoy.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            String modificaciones = jTextField2.getText() + "Actualizado" + nueva_hoy.getDayOfWeek() + nueva_hoy.getDayOfMonth();
-            prestData.modificarPrestamo(id, nueva_hoy, nueva_fe, modificaciones);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "La Fecha devolucion tiene que ser mayor");
-        }
-
+       
         modelo.setRowCount(0);
+        
+        
         //cargar_datos();
 
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jbtnModificarActionPerformed
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-        modelo.setRowCount(0);
-        PrestamoData prestData = new PrestamoData();
-        Prestamo prestamo = new Prestamo();
-        Lector lec = new Lector();
-        String apellido = (String) jComboBox2.getSelectedItem();
+    private void jTPrestamosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTPrestamosMouseClicked
+       PrestamoData presData = new PrestamoData();
+       LectorData lecData = new LectorData();
+       Lector lector = new Lector();
+       EjemplarData ejemData = new EjemplarData();
+       LimpiarComboLibros();
+       LimpiarComboSocios();
+       cargarComboLibro();
+       cargarComboSocios();
+       
+       int filaSeleccionada = jTPrestamos.getSelectedRow();
+       
+       int idPrestamo = (int) jTPrestamos.getValueAt(filaSeleccionada, 0);
+       
+       Prestamo prestamo = presData.obtenerPrestamosSinDevolver(idPrestamo);
+       lector = prestamo.getLector();
+       Libro libro = prestamo.getEjemplar().getLibro();
+       LocalDate fPrestamo = prestamo.getFechaPrestamo();
+       LocalDate fLimite = prestamo.getFechaLimite();
+       String observ = prestamo.getObservaciones();
+       
+       jcbSocios.setSelectedIndex(filaSeleccionada);
+       jcbLibros.setSelectedIndex(filaSeleccionada);
+       jdcFPrestamo.setDate(Date.from(fPrestamo.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+       jdCFLímite.setDate(Date.from(fLimite.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+       if(!observ.isEmpty()){
+           jtxtObservaciones.setText(observ);
+       }else{
+           jtxtObservaciones.setText(" ");
+       }
+       
+    }//GEN-LAST:event_jTPrestamosMouseClicked
 
-        LectorData lectorData = new LectorData();
-        for (Prestamo l : prestData.obtenerPrestamosPorLector(lectorData.buscarLectorPorApellido(apellido).getIdLector())) {
+    
 
-            modelo.addRow(new Object[]{l.getEjemplar().getLibro().getTitulo(), l.getLector().getApellido(), l.getFechaDevolucion(), l.getObservaciones(),
-                l.getIdPrestamo()});
-
+    private void cabeceraTabla1(){
+        
+        modelo.addColumn("ID PRESTAMO");    
+        modelo.addColumn("SOCIO");
+        modelo.addColumn("LIBRO");        
+        modelo.addColumn("FECHA DE PRESTAMO");
+        modelo.addColumn("FECHA LÍMITE");
+        modelo.addColumn("OBSERVACIONES");
+        jTPrestamos.setModel(modelo);
+        
+    }
+    
+    private void cargarTabla(Prestamo prestamo){  
+        
+        modelo.addRow(new Object[]{prestamo.getIdPrestamo(), prestamo.getLector().getApellido()+", "+prestamo.getLector().getNombre(), 
+            prestamo.getEjemplar().getLibro().getTitulo(), prestamo.getFechaPrestamo(), prestamo.getFechaLimite(), prestamo.getObservaciones()});
+        
+    }  
+    private void buscarPrestamos(){
+        
+        PrestamoData presData = new PrestamoData();
+        
+        for (Prestamo prestamo : presData.obtenerPrestamosSinDevolver()){
+            cargarTabla(prestamo);
         }
-
-    }//GEN-LAST:event_jComboBox2ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Vista_Modificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Vista_Modificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Vista_Modificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Vista_Modificaciones.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    
+    private void cargarComboSocios(){
+        
+        LectorData lecData = new LectorData();
+        
+        for (Lector socio : lecData.listarLectores()){
+            jcbSocios.addItem(socio.toString());
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Vista_Modificaciones().setVisible(true);
-            }
-        });
+    }
+    
+    private void cargarComboLibro(){
+        LibroData libData = new LibroData();
+        
+        for (Libro libro : libData.listarLibros()){
+            jcbLibros.addItem(libro.toString());
+        }
     }
 
-    private void cargarCombo() {
-        modelo.addColumn("Titulo");
-        modelo.addColumn("Lector");
-        modelo.addColumn("F Devolucion");
-        modelo.addColumn("Observaciones");
-        modelo.addColumn("Codigo");
-        jTable1.setModel(modelo);
+   private void LimpiarComboSocios(){
+        
+            jcbSocios.removeAllItems();
+       
     }
-
-//    private void cargar_datos() {
-//        LibroData libData = new LibroData();
-//        LectorData lecda = new LectorData();
-//        Prestamo prestamos = new Prestamo();
-//        PrestamoData prestaData = new PrestamoData();
-//
-//        for (Prestamo l : prestaData.obtenerPrestamo()) {
-//
-//            modelo.addRow(new Object[]{l.getEjemplar().getLibro().getTitulo(), l.getLector().getApellido(), l.getFechaDevolucion(), l.getObservaciones(),
-//                l.getIdPrestamo()});
-//
-//        }
-//
-//    }
-    public void scaner() {
-
-        jTable1.addMouseListener(new MouseAdapter() {
-
-            public void mousePressed(MouseEvent Mouse_evt) {
-                // System.out.println(Mouse_evt.getSource());
-                JTable table = (JTable) Mouse_evt.getSource();
-
-                Point point = Mouse_evt.getPoint();
-                int row = table.rowAtPoint(point);
-                if (Mouse_evt.getClickCount() == 1) {
-
-                    jTextField4.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
-                    jTextField3.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString());
-                    String f = jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString();
-                    jTextField5.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 4).toString());
-
-                    LocalDate fe = LocalDate.parse(f);
-                    java.util.Date date = java.util.Date.from(fe.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-                    LocalDate fecha = java.time.LocalDate.now(ZoneId.systemDefault());
-                    jDateChooser1.setDate(date);
-                    java.util.Date datehoy = java.util.Date.from(fecha.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                    jDateChooser2.setDate(datehoy);
-
-                    jTextField2.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 3).toString());
-                }
-
-            }
-
-        });
+   
+   private void LimpiarComboLibros(){
+        
+            jcbLibros.removeAllItems();
+       
     }
-
-    private void buscar() {
-
-        jTextField1.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent ke) {
-                trs.setRowFilter(RowFilter.regexFilter(jTextField1.getText(), jComboBox1.getSelectedIndex()));
-
-            }
-
-        });
-        trs = new TableRowSorter(modelo);
-        jTable1.setRowSorter(trs);
-
-    }
-
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTPrestamos;
+    private javax.swing.JButton jbtnModificar;
+    private javax.swing.JComboBox<String> jcbLibros;
+    private javax.swing.JComboBox<String> jcbSocios;
+    private com.toedter.calendar.JDateChooser jdCFLímite;
+    private com.toedter.calendar.JDateChooser jdcFPrestamo;
     private javax.swing.JLabel jlTitulo;
+    private javax.swing.JTextPane jtxtObservaciones;
     // End of variables declaration//GEN-END:variables
 }
